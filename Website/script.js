@@ -55,7 +55,7 @@ async function loadAlbumSongs(albumName) {
     if (albumToSongs[albumName]) return albumToSongs[albumName];
     if (albumLoadInFlight[albumName]) return albumLoadInFlight[albumName];
 
-    const folderPath = `/Website/songs/${albumName}`;
+    const folderPath = `./Website/songs/${albumName}`;
     const p = (async () => {
         try {
             const res = await fetch(`${folderPath}/`);
@@ -119,7 +119,7 @@ async function renderSongSearchResults(query) {
 
     const fragments = [];
     for (const r of results) {
-        const cover = `/Website/songs/${r.albumName}/cover.jpg`;
+        const cover = `./Website/songs/${r.albumName}/cover.jpg`;
         fragments.push(
             `<li data-album="${r.albumName}" data-track="${encodeURIComponent(r.filename)}">
                 <img width="40" height="40" src="${cover}" alt="Album cover" style="border-radius:4px;object-fit:cover;">
@@ -138,7 +138,7 @@ async function renderSongSearchResults(query) {
             const albumName = li.getAttribute('data-album');
             const track = decodeURIComponent(li.getAttribute('data-track'));
             // Set context to the album of the clicked song
-            currFolder = `/Website/songs/${albumName}`;
+            currFolder = `./Website/songs/${albumName}`;
             songs = albumToSongs[albumName] ? [...albumToSongs[albumName]] : [];
             // Highlight the corresponding album card
             document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
@@ -178,7 +178,7 @@ function filterSongs(query) {
 async function getSongs(albumName) {
     console.log('Getting songs for album:', albumName);
     
-    currFolder = `/Website/songs/${albumName}`;
+    currFolder = `./Website/songs/${albumName}`;
     
     try {
         console.log('Fetching songs from server:', `${currFolder}/`);
@@ -273,7 +273,7 @@ const playMusic = (track, pause = false) => {
         currentSong.play()
             .then(() => {
                 console.log('Audio started playing successfully');
-                play.src = "/Website/img/pause.svg"
+                play.src = "./Website/img/pause.svg"
             })
             .catch(error => {
                 console.error('Error playing audio:', error);
@@ -298,7 +298,7 @@ async function displayAlbums() {
         if (e.href.includes("/songs") && !e.href.includes(".htaccess")) {
             let folder = e.href.split("/").slice(-2)[0]
             // Get the metadata of the folder
-            let a = await fetch(`/Website//songs/${folder}/info.json`)
+            let a = await fetch(`./Website//songs/${folder}/info.json`)
             let response = await a.json(); 
             cardContainer.innerHTML = cardContainer.innerHTML + ` <div data-folder="${folder}" class="card">
             <div class="play">
@@ -309,7 +309,7 @@ async function displayAlbums() {
                 </svg>
             </div>
 
-            <img src="/Website//songs/${folder}/cover.jpg" alt="">
+            <img src="./Website//songs/${folder}/cover.jpg" alt="">
             <h2>${response.title}</h2>
             <p>${response.description}</p>
         </div>`
@@ -441,11 +441,11 @@ async function main() {
     play.addEventListener("click", () => {
         if (currentSong.paused) {
             currentSong.play()
-            play.src = "/Website/img/pause.svg"
+            play.src = "./Website/img/pause.svg"
         }
         else {
             currentSong.pause()
-            play.src = "/Website/img/play.svg"
+            play.src = "./Website/img/play.svg"
         }
     })
 
