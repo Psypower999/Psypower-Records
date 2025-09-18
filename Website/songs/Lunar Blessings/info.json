@@ -1,4 +1,13 @@
 {
   "title": "Lunar Blessings",
-  "description": "7 Tracks"
+  "description": "7 Tracks",
+  "songs": [
+      "1 Lost In Thought.mp3",
+      "2 Glad To Meat You.mp3",
+      "3 Yes, You May!.mp3",
+      "4 I’d Like A Black Rose",
+      "5 Secluded.mp3",
+      "6 Venus Psytrap.mp3",
+      "7 Homeostasis.mp3"
+  ]
 }

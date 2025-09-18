@@ -1,4 +1,11 @@
 {
   "title": "Love Me - Hate Me",
-  "description": "5 Tracks"
+  "description": "5 Tracks",
+  "songs": [
+    "1 Serotonin",
+    "2 Endorphins.mp3",
+    "3 Dopamine.mp3",
+    "4 Oxytocin.mp3",
+    "5 Epinephrine.mp3"
+  ]
 }
