@@ -1,6 +1,6 @@
 
 [
-  {
+  { "folder": "》ᗘ⊚•-ꕢ≒༒≓ꕢ-•⊚ᗛ《",
     "title": "》ᗘ⊚•-ꕢ≒༒≓ꕢ-•⊚ᗛ《",
     "description": "1 Track",
     "songs": [
@@ -9,6 +9,7 @@
   },
 
   {
+    "folder": "Broken Atmosphere",
     "title": "Broken Atmosphere",
     "description": "4 Tracks",
     "songs": [
@@ -20,6 +21,7 @@
   },
 
   {
+    "folder": "Everything, Everywhere, All At Once!",
     "title": "Everything, Everywhere, All At Once!",
     "description": "1 Track",
     "songs": [
@@ -28,6 +30,7 @@
   },
 
   {
+    "folder": "Introspection",
     "title": "Introspection",
     "description": "4 Tracks",
     "songs": [
@@ -39,6 +42,7 @@
   },
 
   {
+    "folder": "Limitless",
     "title": "Limitless",
     "description": "3 Tracks",
     "songs": [
@@ -49,6 +53,7 @@
   },
 
   {
+    "folder": "Love Me - Hate Me",
     "title": "Love Me - Hate Me",
     "description": "5 Tracks",
     "songs": [
@@ -61,6 +66,7 @@
   },
 
   {
+    "folder": "Lunar Blessings",
     "title": "Lunar Blessings",
     "description": "7 Tracks",
     "songs": [
@@ -75,6 +81,7 @@
   },
 
   {
+    "folder": "Nebulochaotic",
     "title": "Nebulochaotic",
     "description": "2 Tracks",
     "songs": [
@@ -84,6 +91,7 @@
   },
 
   {
+    "folder": "Psychological Rewiring",
     "title": "Psychological Rewiring",
     "description": "4 Tracks",
     "songs": [
@@ -95,6 +103,7 @@
   },
 
   {
+    "folder": "Rebirth",
     "title": "Rebirth",
     "description": "1 Track",
     "songs": [
@@ -103,6 +112,7 @@
   },
 
   {
+    "folder": "Satan's Nightmare",
     "title": "Satan's Nightmare",
     "description": "2 Tracks",
     "songs": [
@@ -112,6 +122,7 @@
   },
 
   {
+    "folder": "System Error",
     "title": "System Error",
     "description": "1 Track",
     "songs": [
@@ -120,6 +131,7 @@
   },
 
   {
+    "folder": "The Butterfly Effect",
     "title": "The Butterfly Effect",
     "description": "4 Tracks",
     "songs": [
@@ -130,7 +142,7 @@
     ]
   },
 
-  {
+  { "folder": "Who Cut Your Head Off",
     "title": "Who Cut Your Head Off?",
     "description": "1 Track",
     "songs": [
@@ -138,7 +150,7 @@
     ]
   },
 
-  {
+  { "folder": "Why",
     "title": "Why?",
     "description": "1 Track",
     "songs": [
