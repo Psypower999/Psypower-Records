@@ -15,6 +15,7 @@ let currentSong = new Audio();
 let songs = [];
 let currFolder = '';
 let currentAlbum = '';
+let currentSongIndex = 0; // Track current song index
 
 // Global album index for search
 let albumToSongs = {}; // { [albumName: string]: string[] }
@@ -154,6 +155,9 @@ async function renderSongSearchResults(query) {
                 currFolder = `${baseUrl}Website/songs/${albumName}`;
                 currentAlbum = albumName;
                 songs = albumToSongs[albumName] ? [...albumToSongs[albumName]] : [];
+                // Update current song index
+                currentSongIndex = songs.findIndex(song => cleanSongName(song) === cleanSongName(track));
+                if (currentSongIndex === -1) currentSongIndex = 0;
                 // Highlight the corresponding album card
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
                 const card = document.querySelector(`.card[data-folder="${CSS.escape(albumName)}"]`);
@@ -198,6 +202,7 @@ async function getSongs(albumName) {
     
     currFolder = `${baseUrl}Website/songs/${albumName}`;
     currentAlbum = albumName;
+    currentSongIndex = 0; // Reset index when changing albums
     
     try {
         // Fetch the manifest to get album info and songs
@@ -231,9 +236,10 @@ async function getSongs(albumName) {
     songUL.innerHTML = ""
     
     if (songs.length > 0) {
-        for (const song of songs) {
+        for (let i = 0; i < songs.length; i++) {
+            const song = songs[i];
             const cleanName = cleanSongName(song);
-            songUL.innerHTML = songUL.innerHTML + `<li><img width="40" height="40" src="${currFolder}/cover.jpg" alt="Album cover" style="border-radius:4px;object-fit:cover;">
+            songUL.innerHTML = songUL.innerHTML + `<li data-index="${i}"><img width="40" height="40" src="${currFolder}/cover.jpg" alt="Album cover" style="border-radius:4px;object-fit:cover;">
                                 <div class="info">
                                     <div>${cleanName}</div>
                                     <div>Psypower</div>
@@ -244,7 +250,9 @@ async function getSongs(albumName) {
         // Attach an event listener to each song
         Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach(e => {
             e.addEventListener("click", element => {
-                playMusic(e.querySelector(".info").firstElementChild.innerHTML.trim())
+                const index = parseInt(e.getAttribute('data-index'));
+                currentSongIndex = index;
+                playMusic(songs[index]); // Pass the original filename
             })
         })
     } else {
@@ -262,11 +270,14 @@ async function getSongs(albumName) {
 
 const playMusic = (track, pause = false) => {
     // Find the original filename from the songs array
-    const originalFilename = songs.find(song => cleanSongName(song) === track);
+    const originalFilename = songs.find(song => cleanSongName(song) === cleanSongName(track));
     const filenameToPlay = originalFilename || track;
     
     // Get the clean song name for display
-    const cleanDisplayName = originalFilename ? cleanSongName(originalFilename) : cleanSongName(track);
+    const cleanDisplayName = cleanSongName(filenameToPlay);
+    
+    // Update current song index
+    currentSongIndex = songs.findIndex(song => cleanSongName(song) === cleanSongName(track));
     
     currentSong.src = `${currFolder}/` + filenameToPlay
     console.log('Playing music from:', currentSong.src);
@@ -274,6 +285,7 @@ const playMusic = (track, pause = false) => {
     console.log('Track:', track);
     console.log('Original filename:', filenameToPlay);
     console.log('Clean display name:', cleanDisplayName);
+    console.log('Current song index:', currentSongIndex);
     
     if (!pause) {
         currentSong.play()
@@ -290,6 +302,27 @@ const playMusic = (track, pause = false) => {
     document.querySelector(".songtime").innerHTML = "00:00 / 00:00"
 }
 
+// Next and previous song functions
+const playNextSong = () => {
+    if (songs.length === 0) return;
+    
+    // Move to next song, loop to beginning if at end
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    console.log('Next song index:', currentSongIndex);
+    const nextSong = songs[currentSongIndex];
+    playMusic(nextSong); // Pass the original filename
+}
+
+const playPreviousSong = () => {
+    if (songs.length === 0) return;
+    
+    // Move to previous song, loop to end if at beginning
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    console.log('Previous song index:', currentSongIndex);
+    const prevSong = songs[currentSongIndex];
+    playMusic(prevSong); // Pass the original filename
+}
+
 async function displayAlbums() {
     console.log("displaying albums")
     
@@ -302,6 +335,8 @@ async function displayAlbums() {
         console.log('Manifest loaded:', manifest);
         
         let cardContainer = document.querySelector(".cardContainer")
+        // Clear existing albums before adding new ones
+        cardContainer.innerHTML = ""
         
         for (const album of manifest.albums) {
             cardContainer.innerHTML = cardContainer.innerHTML + ` 
@@ -346,9 +381,11 @@ async function main() {
     // Display albums
     await displayAlbums();
 
-    // Add click listeners to all album cards (static and dynamic)
-    document.querySelectorAll('.card[data-folder]').forEach(card => {
-        card.addEventListener('click', async () => {
+    // Use event delegation for album cards to handle dynamically added elements
+    document.querySelector(".cardContainer").addEventListener("click", async (e) => {
+        // Find the closest card element from the target
+        const card = e.target.closest('.card[data-folder]');
+        if (card) {
             console.log('Album card clicked!');
             
             // Remove selected class from all cards
@@ -366,6 +403,8 @@ async function main() {
                 
                 if (songs && songs.length > 0) {
                     console.log('Playing first song:', songs[0]);
+                    // Explicitly set index to 0 and play the first song
+                    currentSongIndex = 0;
                     playMusic(songs[0]);
                     // Show the left sidebar with the song list
                     document.querySelector('.left').style.left = '0';
@@ -375,7 +414,7 @@ async function main() {
             } catch (error) {
                 console.error('Error loading songs:', error);
             }
-        });
+        }
     });
 
     // Wire up left menu: Home and Search
@@ -444,6 +483,13 @@ async function main() {
             play.src = `${baseUrl}Website/img/play.svg`
         }
     })
+
+    // Add event listeners for next and previous buttons
+    document.getElementById('next').addEventListener('click', playNextSong);
+    document.getElementById('previous').addEventListener('click', playPreviousSong);
+
+    // Auto-play next song when current song ends
+    currentSong.addEventListener('ended', playNextSong);
 
     // Listen for timeupdate event
     currentSong.addEventListener("timeupdate", () => {
